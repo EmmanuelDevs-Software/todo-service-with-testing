@@ -58,7 +58,7 @@ export class TodoService {
   }
 
   /**
-  * Update
+  * UpdateToComplete
   *
   * @param todo Todo
   */
@@ -76,5 +76,14 @@ export class TodoService {
   remove(id: string): Observable<string> {
     const url = `${this.baseUrl}/todos/${id}`;
     return this.http.delete<void>(url).pipe(map(() => id));
+  }
+
+  /**
+ * Remove All
+ *
+ */
+  removeAll(): Observable<boolean> {
+    const url = `${this.baseUrl}/todos`;
+    return this.http.delete<void>(url).pipe(map(() => true));
   }
 }

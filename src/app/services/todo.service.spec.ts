@@ -137,6 +137,15 @@ describe('TodoService', () => {
 
   });
 
+
+  /**
+  * END FIND CREATE TODO
+  */
+
+  /**
+     *  UPDATE TODO
+     */
+
   it('Should successfully mock update request', () => {
     const task: TodoUpdateDto = {
       id: '1',
@@ -160,7 +169,14 @@ describe('TodoService', () => {
     req.flush(todo);
   });
 
+  /**
+    * END UPDATE TODO
+    */
 
+
+  /**
+      *  UPDATE TO COMPLETE 
+      */
   it('Should successfully All to Complete update request', () => {
     const task: TodoUpdateDto = {
       id: '1',
@@ -179,12 +195,20 @@ describe('TodoService', () => {
       expect(response).toEqual(todoComplete)
     });
 
+
+
     const req = httpMock.expectOne(`/todos/${task.id}`);
     expect(req.request.method).toEqual('PUT');
     req.flush(todoComplete);
   });
 
+  /**
+    * END  UPDATE TO COMPLETE 
+    */
 
+  /**
+* DELETE TODO
+*/
 
   it('should successfully mock remove request', () => {
     const id = '1';
@@ -194,5 +218,27 @@ describe('TodoService', () => {
     const req = httpMock.expectOne(`/todos/${id}`);
     expect(req.request.method).toEqual('DELETE');
   });
+
+
+  /**
+* END DELETE TODO
+*/
+
+  /**
+* DELETE TODO ALL
+*/
+
+  it('should successfully mock remove request', () => {
+    service.removeAll().subscribe((data) => {
+      expect(data).toEqual(true);
+    });
+    const req = httpMock.expectOne(`/todos`);
+    expect(req.request.method).toEqual('DELETE');
+  });
+
+
+  /**
+  * END DELETE TODO ALL
+  */
 
 });
