@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Todo, TodoCreateDto, TodoUpdateDto } from 'src/models/todo.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
+  private currentTodoSubject: BehaviorSubject<Todo[]> = new BehaviorSubject({} as Todo[]);
+  public readonly currentTodos: Observable<Todo[]> = this.currentTodoSubject.asObservable();
 
   constructor(private http: HttpClient,
     @Inject('API_URL') private baseUrl: string
@@ -20,11 +22,16 @@ export class TodoService {
  * @param limit Limit
  */
   findAll(offset?: number, limit?: number): Observable<Todo[]> {
-    const url = `${this.baseUrl}/todos`;
-    let params = new HttpParams();
-    params = offset ? params.set('offset', `${offset}`) : params;
-    params = limit ? params.set('limit', `${limit}`) : params;
-    return this.http.get<Todo[]>(url, { params });
+    return new Observable(observer => {
+      const url = `${this.baseUrl}/todos`;
+      let params = new HttpParams();
+      params = offset ? params.set('offset', `${offset}`) : params;
+      params = limit ? params.set('limit', `${limit}`) : params;
+      this.http.get<Todo[]>(url, { params }).subscribe(todos => {
+        this.currentTodoSubject.next(todos);
+        observer.next(todos)
+      });
+    })
   }
 
   /**
@@ -37,14 +44,22 @@ export class TodoService {
     return this.http.get<Todo>(url);
   }
 
+
+
+
   /**
  * Create
  *
  * @param todo Todo
  */
   create(todo: TodoCreateDto): Observable<Todo> {
-    const url = `${this.baseUrl}/todos`;
-    return this.http.post<Todo>(url, todo);
+    return new Observable(observer => {
+      const url = `${this.baseUrl}/todos`;
+      this.http.post<Todo>(url, todo).subscribe(todo => {
+        this.findAll().subscribe(res => res)
+        observer.next(todo)
+      })
+    })
   }
 
   /**
@@ -62,8 +77,7 @@ export class TodoService {
   *
   * @param todo Todo
   */
-  updateToComplete(todo: TodoUpdateDto): Observable<Todo> {
-    todo.completed = !todo.completed;
+  updateToComplete(todo: any): Observable<Todo> {
     const url = `${this.baseUrl}/todos/${todo.id}`;
     return this.http.put<Todo>(url, todo);
   }
@@ -74,16 +88,14 @@ export class TodoService {
    * @param id ID
    */
   remove(id: string): Observable<string> {
-    const url = `${this.baseUrl}/todos/${id}`;
-    return this.http.delete<void>(url).pipe(map(() => id));
+    return new Observable(observer => {
+      const url = `${this.baseUrl}/todos/${id}`;
+      this.http.delete(url).subscribe(res => res);
+      this.findAll().subscribe();
+      observer.next('DELETE')
+    })
+
   }
 
-  /**
- * Remove All
- *
- */
-  removeAll(): Observable<boolean> {
-    const url = `${this.baseUrl}/todos`;
-    return this.http.delete<void>(url).pipe(map(() => true));
-  }
+
 }

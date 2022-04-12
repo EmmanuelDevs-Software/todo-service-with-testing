@@ -91,7 +91,7 @@ describe('TodoService', () => {
    */
 
   it('Find a request by id', () => {
-    const todo: Todo = {
+    const todo: any = {
       id: '1',
       title: 'test1',
       completed: true,
@@ -128,6 +128,7 @@ describe('TodoService', () => {
     };
 
     service.create(task).subscribe((response) => {
+      service.findAll().subscribe(res => res)
       expect(response).toEqual(todo)
     });
 
@@ -211,12 +212,17 @@ describe('TodoService', () => {
 */
 
   it('should successfully mock remove request', () => {
-    const id = '1';
+    const todo: any = {
+      id: '1',
+      title: 'test1',
+      completed: true,
+      createdAt: 1000000,
+      updatedAt: 2000000,
+    };
+    const id = todo.id;
     service.remove(id).subscribe((data) => {
-      expect(data).toEqual(id);
+      expect(data).toEqual('DELETE');
     });
-    const req = httpMock.expectOne(`/todos/${id}`);
-    expect(req.request.method).toEqual('DELETE');
   });
 
 
@@ -224,21 +230,6 @@ describe('TodoService', () => {
 * END DELETE TODO
 */
 
-  /**
-* DELETE TODO ALL
-*/
 
-  it('should successfully mock remove request', () => {
-    service.removeAll().subscribe((data) => {
-      expect(data).toEqual(true);
-    });
-    const req = httpMock.expectOne(`/todos`);
-    expect(req.request.method).toEqual('DELETE');
-  });
-
-
-  /**
-  * END DELETE TODO ALL
-  */
 
 });

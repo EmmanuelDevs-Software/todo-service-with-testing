@@ -1,0 +1,14 @@
+<div class="text-center container">
+    <form class="row g-3 text-center form-product" [formGroup]="validations_form"
+        (ngSubmit)="onSubmit(validations_form.value)">
+        <div class="text-center">
+            <h1>Todos</h1>
+        </div>
+        <div class="col-lg-12 col-sm-12">
+            <input required type="text" placeholder="Which is your task" class="form-control" formControlName="title" id="title">
+        </div>
+        <div class="col-lg-12 col-sm-12">
+            <button type="submit" class="btn btn-sm btn-primary" [disabled]="!validations_form.valid">Add Task</button>
+        </div>
+    </form>
+</div>

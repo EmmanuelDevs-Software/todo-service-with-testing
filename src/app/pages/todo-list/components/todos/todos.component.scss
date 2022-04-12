@@ -1,0 +1,45 @@
+.completed{
+    background: darkseagreen;
+    color: white;
+    text-align: initial;
+    opacity: 0.85;
+}
+
+.incompleted{
+    background: gray ;
+    color: white;
+    text-align: initial;
+}
+
+.completedTitle{
+    background: transparent ;
+    color: white;
+    text-align: initial;
+    border: none;
+}
+
+.incompletedTitle{
+    background: transparent ;
+    color: white;
+    text-align: initial;
+    border: none;
+}
+
+
+.btn-link{
+    background: transparent !important;
+    color: white;
+    text-decoration: none;
+    text-align: right;
+    border: none;
+    float: right;
+}
+
+.list-group-item{
+    background: transparent;
+    border: none;
+}
+
+.card{
+    box-shadow: 0px 0px 10px black;
+}

@@ -1,9 +1,9 @@
 export interface Todo {
     id: string;
-    title: string;
-    completed: boolean;
-    createdAt: number;
-    updatedAt: number;
+    title?: string;
+    completed?: boolean;
+    createdAt?: number;
+    updatedAt?: number;
   }
   
   export interface TodoCreateDto {
