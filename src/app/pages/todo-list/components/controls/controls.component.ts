@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { TodoService } from 'src/app/services/todo.service';
 
 @Component({
@@ -6,10 +6,16 @@ import { TodoService } from 'src/app/services/todo.service';
   templateUrl: './controls.component.html',
   styleUrls: ['./controls.component.scss']
 })
-export class ControlsComponent implements OnInit {
+export class ControlsComponent implements OnInit, OnDestroy {
   @Input() todos: any
   todoServices: any;
   constructor(private todoService: TodoService) { }
+  
+  ngOnDestroy(): void {
+    this.init();
+    this.completeAll();
+    this.inCompleteAll();
+  }
 
   ngOnInit(): void {
     this.init()
