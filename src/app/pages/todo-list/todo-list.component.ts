@@ -19,16 +19,4 @@ export class TodoListComponent implements OnInit {
 
   }
 
-
-  createTodo() {
-    let todo = {
-      title: "HOla",
-      isComplete: true,
-      completed: "2022-04-11T10:38:31.739Z",
-      updatedAt: "2022-04-11T10:38:31.739Z"
-    }
-    this.todoService.create(todo).subscribe(res => console.log('ddd',res))
-    this.todoService.findAll().subscribe(res => res)
-  }
-
 }
